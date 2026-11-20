@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Анализ современных технологий адаптации персонала · ЭОР · Богданова Е. М-31 НИУ МИЭТ</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #faf7ff; --bg-alt: #f3edff; --card: #ffffff;
+    --text: #2e1065; --muted: #6b6280;
+    --primary: #8b5cf6; --primary-dark: #6d28d9; --primary-light: #ede9fe;
+    --accent: #c084fc; --accent-soft: #e9d5ff; --pink-lav: #f0abfc;
+    --green: #10b981; --red: #ef4444; --amber: #f59e0b;
+    --border: #e9e4f5;
+    --shadow: 0 4px 20px rgba(139,92,246,.08);
+    --shadow-lg: 0 20px 50px rgba(139,92,246,.18);
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.65;
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+
+  #read-progress {
+    position: fixed; top: 0; left: 0; height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--accent), var(--pink-lav));
+    width: 0%; z-index: 1000; transition: width .1s;
+  }
+
+  .nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(250,247,255,.9); backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-inner {
+    max-width: 1200px; margin: 0 auto; padding: 12px 24px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  }
+  .logo { font-weight: 800; font-size: 15px; color: var(--text); text-decoration: none; }
+  .logo span { color: var(--primary); }
+  .nav-links { display: flex; gap: 14px; flex-wrap: wrap; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 12.5px; font-weight: 500; transition: color .2s; }
+  .nav-links a:hover { color: var(--primary); }
+
+  .titre {
+    background: linear-gradient(135deg, #1e1b4b 0%, #4c1d95 55%, #6d28d9 100%);
+    color: #fff; padding: 40px 24px; text-align: center;
+  }
+  .titre-inner { max-width: 900px; margin: 0 auto; }
+  .titre-label { font-size: 11px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: #c4b5fd; margin-bottom: 12px; }
+  .titre-title { font-size: clamp(19px, 3.3vw, 26px); font-weight: 800; line-height: 1.25; margin-bottom: 16px; }
+  .titre-meta { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 24px; font-size: 13px; color: #c4b5fd; }
+  .titre-meta strong { color: #fff; font-weight: 600; }
+
+  .hero {
+    padding: 70px 24px 90px;
+    background: linear-gradient(135deg, #faf7ff 0%, #f3edff 50%, #ede9fe 100%);
+    text-align: center;
+  }
+  .badge {
+    display: inline-block; padding: 7px 18px; border-radius: 999px;
+    background: rgba(255,255,255,.7); border: 1px solid var(--accent-soft);
+    font-size: 11.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--primary-dark); margin-bottom: 22px;
+  }
+  .hero h1 { font-size: clamp(30px, 5.5vw, 56px); line-height: 1.05; letter-spacing: -.035em; font-weight: 800; margin-bottom: 22px; }
+  .gradient-text { background: linear-gradient(90deg, #7c3aed, #a855f7, #f0abfc, #a855f7, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero-sub { font-size: clamp(15px, 2.1vw, 18px); color: var(--muted); max-width: 660px; margin: 0 auto 34px; }
+  .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 26px; border-radius: 12px; font-weight: 700; font-size: 14.5px; text-decoration: none; cursor: pointer; border: none; transition: transform .2s, box-shadow .25s; font-family: inherit; }
+  .btn:hover { transform: translateY(-3px); }
+  .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; box-shadow: 0 10px 30px rgba(139,92,246,.35); }
+  .btn-ghost { background: rgba(255,255,255,.8); color: var(--primary-dark); border: 1.5px solid var(--accent-soft); }
+  .btn[disabled] { opacity: .4; cursor: not-allowed; transform: none; }
+
+  .section-pad { max-width: 1200px; margin: 0 auto; padding: 70px 24px; }
+  .section-tag { display: inline-block; font-size: 11.5px; font-weight: 700; color: var(--primary); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 12px; }
+  h2 { font-size: clamp(24px, 4vw, 38px); font-weight: 800; margin-bottom: 14px; line-height: 1.15; }
+  h3 { font-size: clamp(19px, 2.7vw, 24px); font-weight: 800; margin: 32px 0 16px; color: var(--primary-dark); }
+  .lead { font-size: 16.5px; color: var(--muted); max-width: 760px; margin-bottom: 32px; }
+  p { font-size: 15.5px; margin-bottom: 14px; }
+  p strong { color: var(--primary-dark); }
+
+  .theory-block { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 32px; box-shadow: var(--shadow); margin-bottom: 22px; }
+  .theory-block h3 { display: block; margin-bottom: 16px; font-size: 21px; }
+
+  .callout { background: linear-gradient(135deg, #f5f0ff, #faf7ff); border-left: 4px solid var(--primary); padding: 16px 20px; border-radius: 12px; margin: 18px 0; }
+  .callout p { margin: 0; font-size: 14.5px; }
+
+  .why-list { display: grid; gap: 14px; }
+  .why-item { display: flex; gap: 16px; padding: 20px; background: var(--card); border-radius: 14px; border: 1px solid var(--border); }
+  .why-num { font-size: 22px; font-weight: 800; color: var(--primary); min-width: 42px; height: 42px; border-radius: 12px; background: var(--primary-light); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .why-item h4 { font-size: 16px; margin-bottom: 4px; }
+  .why-item p { font-size: 14.5px; color: var(--muted); margin: 0; }
+
+  table.mini-table { width: 100%; border-collapse: collapse; margin: 16px 0; background: var(--card); border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(139,92,246,.08); }
+  table.mini-table th { background: linear-gradient(135deg, #4c1d95, #6d28d9); color: #fff; padding: 12px 14px; text-align: left; font-weight: 700; font-size: 13.5px; }
+  table.mini-table td { padding: 11px 14px; border-bottom: 1px solid var(--border); font-size: 14px; }
+  table.mini-table tr:last-child td { border-bottom: none; }
+  table.mini-table tr:nth-child(even) td { background: #faf7ff; }
+  table.mini-table td:first-child { font-weight: 600; color: var(--primary-dark); }
+
+  .svg-schema { background: #faf7ff; border-radius: 14px; padding: 20px; margin: 18px 0; text-align: center; }
+  .svg-schema svg { max-width: 100%; height: auto; }
+
+  .interactive-box { background: linear-gradient(135deg, #f5f0ff, #faf7ff); border: 2px dashed var(--accent); border-radius: 16px; padding: 22px; margin: 18px 0; }
+  .interactive-title { font-size: 13px; font-weight: 700; color: var(--primary-dark); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; }
+
+  .game-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 8px; margin-bottom: 12px; }
+  .game-opt { padding: 12px 16px; border-radius: 10px; background: #fff; border: 2px solid var(--border); cursor: pointer; text-align: left; font-family: inherit; font-size: 13.5px; font-weight: 600; color: var(--text); transition: all .2s; }
+  .game-opt:hover:not(:disabled) { border-color: var(--primary); background: var(--primary-light); }
+  .game-opt.selected { border-color: var(--primary); background: var(--primary-light); }
+  .game-opt.correct { background: #ecfdf5; border-color: var(--green); color: #065f46; }
+  .game-opt.wrong { background: #fef2f2; border-color: var(--red); color: #991b1b; }
+  .game-opt:disabled { cursor: default; }
+
+  .game-scenario { font-size: 15px; font-weight: 600; line-height: 1.5; margin-bottom: 14px; padding: 14px 16px; background: #fff; border-radius: 10px; border-left: 3px solid var(--primary); }
+  .game-feedback { padding: 12px 14px; border-radius: 10px; background: var(--primary-light); color: var(--primary-dark); font-size: 13.5px; font-weight: 500; display: none; margin-top: 10px; }
+  .game-feedback.show { display: block; }
+  .game-result { padding: 14px; border-radius: 10px; font-size: 14px; margin-top: 12px; }
+  .game-result.good { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+  .game-result.bad { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+
+  .stage-sorter { display: flex; flex-direction: column; gap: 6px; margin: 12px 0; }
+  .stage-sort-item { display: flex; align-items: center; gap: 10px; background: #fff; border: 2px solid var(--border); border-radius: 10px; padding: 10px 14px; font-size: 14px; font-weight: 600; }
+  .stage-sort-item.correct { border-color: var(--green); background: #ecfdf5; color: #065f46; }
+  .stage-sort-item .sorter-btns { display: flex; gap: 4px; margin-left: auto; }
+  .sorter-arrow { width: 28px; height: 28px; border-radius: 6px; border: 1px solid var(--border); background: #fff; cursor: pointer; font-size: 13px; }
+  .sorter-arrow:hover { background: var(--primary-light); border-color: var(--primary); }
+
+  .subtabs-nav { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
+  .subtab-btn { padding: 10px 20px; border-radius: 11px; font-size: 13.5px; font-weight: 600; background: var(--card); color: var(--muted); border: 1.5px solid var(--border); cursor: pointer; font-family: inherit; transition: all .2s; }
+  .subtab-btn:hover { border-color: var(--primary); color: var(--primary); }
+  .subtab-btn.active { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; border-color: transparent; }
+  .subtab-panel { display: none; }
+  .subtab-panel.active { display: block; }
+
+  .tech-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 20px; }
+  .tech-card { perspective: 1400px; height: 275px; cursor: pointer; }
+  .tech-inner { position: relative; width: 100%; height: 100%; transition: transform .7s cubic-bezier(.4,.2,.2,1); transform-style: preserve-3d; }
+  .tech-card.flipped .tech-inner { transform: rotateY(180deg); }
+  .tech-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 18px; padding: 22px; display: flex; flex-direction: column; border: 1px solid var(--border); box-shadow: var(--shadow); }
+  .tech-front { background: var(--card); justify-content: space-between; }
+  .tech-front:hover { box-shadow: var(--shadow-lg); }
+  .tech-icon { font-size: 40px; line-height: 1; margin-bottom: 4px; }
+  .tech-front h3 { font-size: 17px; font-weight: 700; line-height: 1.3; margin: 0; }
+  .tech-cat { display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 3px 9px; border-radius: 6px; background: var(--primary-light); color: var(--primary-dark); align-self: flex-start; margin-bottom: auto; }
+  .tech-hint { font-size: 11.5px; color: var(--primary); text-transform: uppercase; letter-spacing: .08em; font-weight: 700; }
+  .tech-back { background: linear-gradient(135deg, #4c1d95, #7c3aed); color: #fff; transform: rotateY(180deg); justify-content: center; }
+  .tech-back h3 { font-size: 13px; color: #c4b5fd; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+  .tech-back p { font-size: 13px; line-height: 1.55; color: #ede9fe; margin-bottom: 8px; }
+  .tech-back .case { font-size: 11.5px; color: #a78bfa; margin-top: 8px; font-style: italic; padding-top: 8px; border-top: 1px solid rgba(196,181,253,.3); }
+
+  .expand-wrap { margin-top: 32px; text-align: center; }
+  .expand-btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 26px; border-radius: 12px; background: var(--card); color: var(--primary-dark); border: 2px solid var(--primary); font-family: inherit; font-weight: 700; font-size: 14.5px; cursor: pointer; transition: all .2s; }
+  .expand-btn:hover { background: var(--primary-light); }
+  .full-descriptions { display: none; margin-top: 26px; }
+  .full-descriptions.open { display: block; }
+  .full-desc-item { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 14px; }
+  .full-desc-item h4 { font-size: 17px; margin-bottom: 6px; color: var(--primary-dark); display: flex; align-items: center; gap: 10px; }
+  .full-desc-item .full-desc-cat { display: inline-block; font-size: 10.5px; font-weight: 700; text-transform: uppercase; padding: 3px 9px; border-radius: 6px; background: var(--primary-light); color: var(--primary-dark); margin-left: auto; }
+  .full-desc-item .full-desc-cat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 10px; }
+  .full-desc-item p { font-size: 14.5px; margin-bottom: 10px; }
+  .full-desc-item .full-desc-case { font-size: 13.5px; background: #f5f0ff; padding: 10px 14px; border-radius: 10px; border-left: 3px solid var(--primary); }
+  .full-desc-item .full-desc-case strong { color: var(--primary-dark); }
+
+  .matrix-wrap { overflow-x: auto; border-radius: 16px; border: 1px solid var(--border); box-shadow: var(--shadow); background: var(--card); margin: 16px 0; }
+  table.matrix { width: 100%; border-collapse: collapse; min-width: 760px; font-size: 13.5px; }
+  table.matrix th { background: linear-gradient(135deg, #4c1d95, #6d28d9); color: #fff; padding: 13px 11px; text-align: left; font-weight: 700; font-size: 12.5px; }
+  table.matrix td { padding: 11px; border-bottom: 1px solid var(--border); }
+  table.matrix tr:last-child td { border-bottom: none; }
+  table.matrix tr:nth-child(even) td { background: #faf7ff; }
+  table.matrix td:first-child { font-weight: 700; color: var(--primary-dark); }
+  .pill { display: inline-block; padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+  .pill.low { background: #ecfdf5; color: #065f46; }
+  .pill.mid { background: #fffbeb; color: #92400e; }
+  .pill.high { background: #fef2f2; color: #991b1b; }
+  .pill.fast { background: #ede9fe; color: #6d28d9; }
+  .pill.slow { background: #f3f4f6; color: #4b5563; }
+
+  .cases-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 18px; margin: 16px 0; }
+  .case-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 22px; box-shadow: var(--shadow); transition: transform .2s; }
+  .case-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+  .case-logo { display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 12px; background: linear-gradient(135deg, var(--primary-light), var(--accent-soft)); font-size: 22px; margin-bottom: 12px; }
+  .case-card h4 { font-size: 16px; margin-bottom: 6px; }
+  .case-card p { font-size: 13.5px; color: var(--muted); margin-bottom: 10px; }
+  .case-result { display: inline-block; font-size: 12.5px; font-weight: 700; background: #ecfdf5; color: #065f46; padding: 5px 12px; border-radius: 7px; }
+
+  .accordion { display: flex; flex-direction: column; gap: 10px; margin: 16px 0; }
+  .acc-item { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+  .acc-item.open { border-color: var(--primary); box-shadow: var(--shadow); }
+  .acc-btn { width: 100%; padding: 18px 22px; background: transparent; border: none; display: flex; justify-content: space-between; align-items: center; gap: 14px; font-family: inherit; font-size: 15px; font-weight: 600; color: var(--text); cursor: pointer; text-align: left; }
+  .acc-btn:hover { background: var(--bg-alt); }
+  .acc-icon { font-size: 20px; color: var(--primary); transition: transform .3s; flex-shrink: 0; }
+  .acc-item.open .acc-icon { transform: rotate(45deg); }
+  .acc-body { max-height: 0; overflow: hidden; transition: max-height .4s ease; }
+  .acc-item.open .acc-body { max-height: 500px; }
+  .acc-body-inner { padding: 0 22px 20px; }
+  .acc-body ul { padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: #3f3a52; }
+
+  .quiz-wrap { display: flex; flex-direction: column; gap: 14px; }
+  .quiz-q { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 22px; }
+  .q-num { font-size: 11.5px; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+  .q-text { font-size: 15.5px; font-weight: 600; margin-bottom: 16px; line-height: 1.45; }
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .option { text-align: left; padding: 13px 16px; border-radius: 10px; font-size: 14px; background: var(--bg-alt); border: 2px solid transparent; color: var(--text); cursor: pointer; transition: all .2s; font-family: inherit; }
+  .option:hover:not(:disabled) { border-color: var(--primary); background: var(--primary-light); }
+  .option.correct { background: #ecfdf5; border-color: var(--green); color: #065f46; font-weight: 600; }
+  .option.wrong { background: #fef2f2; border-color: var(--red); color: #991b1b; font-weight: 600; }
+  .option:disabled { cursor: default; }
+
+  .quiz-score { margin-top: 24px; padding: 30px; border-radius: 18px; text-align: center; background: linear-gradient(135deg, #f5f0ff, #faf7ff); border: 1px solid var(--border); font-size: 15px; display: none; }
+  .quiz-score.show { display: block; }
+  .quiz-score .big { font-size: 40px; font-weight: 800; color: var(--primary-dark); display: block; margin-bottom: 6px; line-height: 1; }
+  .quiz-score .verdict { color: var(--muted); margin-top: 8px; }
+  .cert-btn-wrap { margin-top: 20px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+  .conclusions { background: linear-gradient(135deg, #1e1b4b 0%, #4c1d95 50%, #6d28d9 100%); border-radius: 20px; padding: 36px; color: #fff; margin-bottom: 22px; }
+  .conclusions h3 { font-size: 20px; margin-bottom: 22px; color: #fff; }
+  .concl-list { display: flex; flex-direction: column; gap: 14px; }
+  .concl-item { display: flex; gap: 14px; align-items: flex-start; }
+  .concl-num { font-size: 13px; font-weight: 800; color: #1e1b4b; min-width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, #c4b5fd, #f0abfc); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .concl-item p { font-size: 14.5px; color: #e9d5ff; line-height: 1.55; margin: 0; }
+  .concl-item strong { color: #fff; }
+
+  .tasks-box { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 32px; box-shadow: var(--shadow); margin-bottom: 22px; }
+  .tasks-box h3 { margin-top: 0; }
+  .task-list { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+  .task-item { display: flex; gap: 12px; align-items: flex-start; padding: 12px 16px; background: var(--bg-alt); border-radius: 10px; }
+  .task-check { width: 22px; height: 22px; border-radius: 6px; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; flex-shrink: 0; }
+  .task-item p { font-size: 14.5px; margin: 0; }
+
+  .sources-list { display: flex; flex-direction: column; gap: 10px; max-width: 900px; }
+  .source-item { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 15px 18px; display: flex; gap: 14px; align-items: flex-start; }
+  .source-num { font-size: 12px; font-weight: 800; color: var(--primary); min-width: 26px; height: 26px; border-radius: 7px; background: var(--primary-light); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .source-item p { font-size: 13.5px; color: #3f3a52; margin: 0; }
+  .source-item a { color: var(--primary-dark); text-decoration: none; word-break: break-all; }
+  .source-item a:hover { text-decoration: underline; }
+
+  .penguin { position: fixed; bottom: 20px; right: 20px; z-index: 500; display: flex; align-items: flex-end; gap: 10px; }
+  .penguin-bubble { max-width: 260px; background: #fff; border: 2px solid var(--primary); border-radius: 16px 16px 4px 16px; padding: 12px 15px; font-size: 13px; color: var(--text); line-height: 1.45; box-shadow: 0 10px 30px rgba(139,92,246,.25); position: relative; transition: all .3s; }
+  .penguin-bubble.hidden { opacity: 0; pointer-events: none; }
+  .penguin-close { position: absolute; top: 4px; right: 6px; background: none; border: none; color: var(--muted); font-size: 15px; cursor: pointer; padding: 2px; }
+  .penguin-avatar { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #4c1d95, #7c3aed); display: flex; align-items: center; justify-content: center; font-size: 36px; cursor: pointer; flex-shrink: 0; box-shadow: 0 10px 30px rgba(139,92,246,.4); position: relative; }
+  .penguin-name { position: absolute; bottom: -6px; right: -4px; background: var(--pink-lav); color: #1e1b4b; font-size: 9.5px; font-weight: 800; padding: 2px 7px; border-radius: 999px; }
+
+  .penguin-faq { position: fixed; bottom: 100px; right: 20px; z-index: 501; width: 330px; max-width: calc(100vw - 40px); background: #fff; border-radius: 18px; box-shadow: 0 20px 60px rgba(30,27,75,.25); border: 1px solid var(--border); overflow: hidden; display: none; }
+  .penguin-faq.open { display: block; }
+  .faq-header { background: linear-gradient(135deg, #4c1d95, #7c3aed); color: #fff; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; font-weight: 700; font-size: 13.5px; }
+  .faq-header button { background: rgba(255,255,255,.15); border: none; color: #fff; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; font-size: 15px; }
+  .faq-body { max-height: 380px; overflow-y: auto; padding: 14px; }
+  .faq-options { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+  .faq-opt { text-align: left; padding: 10px 12px; border-radius: 9px; background: var(--bg-alt); border: 1.5px solid transparent; cursor: pointer; font-family: inherit; font-size: 13px; color: var(--text); font-weight: 500; transition: all .2s; }
+  .faq-opt:hover { background: var(--primary-light); border-color: var(--primary); }
+  .faq-answer { padding: 12px; background: var(--primary-light); border-radius: 10px; font-size: 13px; line-height: 1.55; color: var(--primary-dark); display: none; border-left: 3px solid var(--primary); }
+  .faq-answer.show { display: block; }
+
+  footer { background: linear-gradient(135deg, #1e1b4b 0%, #4c1d95 100%); color: #c4b5fd; padding: 46px 24px 28px; margin-top: 50px; }
+  .footer-inner { max-width: 1200px; margin: 0 auto; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 36px; margin-bottom: 26px; }
+  footer h4 { color: #fff; font-size: 14.5px; margin-bottom: 12px; }
+  footer p { font-size: 13px; line-height: 1.65; color: #a78bfa; margin-bottom: 8px; }
+  footer ul { list-style: none; display: flex; flex-direction: column; gap: 7px; font-size: 13px; }
+  footer ul li a { color: #c4b5fd; text-decoration: none; }
+  footer ul li a:hover { color: #fff; }
+  .footer-bottom { margin-top: 22px; padding-top: 20px; border-top: 1px solid #5b21b6; font-size: 12px; color: #a78bfa; text-align: center; }
+
+  .modal-bg { position: fixed; inset: 0; background: rgba(30,27,75,.6); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .modal-bg.open { display: flex; }
+  .modal { background: #fff; border-radius: 20px; padding: 32px; max-width: 420px; width: 100%; }
+  .modal h3 { font-size: 20px; margin-bottom: 8px; color: var(--primary-dark); }
+  .modal p { font-size: 14px; color: var(--muted); margin-bottom: 18px; }
+  .modal input { width: 100%; padding: 12px 14px; border-radius: 10px; border: 1.5px solid var(--border); font-family: inherit; font-size: 15px; margin-bottom: 14px; color: var(--text); }
+  .modal input:focus { outline: none; border-color: var(--primary); }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+  #certificate-area { display: none; padding: 40px 24px; text-align: center; }
+  #cert-canvas-wrap canvas { max-width: 100%; height: auto; border-radius: 16px; box-shadow: 0 20px 60px rgba(30,27,75,.2); }
+
+  @media (max-width: 820px) {
+    .nav-links { display: none; }
+    .section-pad { padding: 50px 16px; }
+    .theory-block { padding: 22px; }
+    .tech-card { height: 270px; }
+    .footer-grid { grid-template-columns: 1fr; gap: 20px; }
+    .quiz-q { padding: 18px; }
+    .penguin-bubble { max-width: 220px; font-size: 12px; }
+    .penguin-avatar { width: 58px; height: 58px; font-size: 32px; }
+    .full-desc-item h4 { flex-wrap: wrap; }
+    .full-desc-item .full-desc-cat { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div id="read-progress"></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#top" class="logo">HR<span>·</span>Онбординг</a>
+    <div class="nav-links">
+      <a href="#theory">Теория</a>
+      <a href="#tech">Технологии</a>
+      <a href="#analysis">Анализ</a>
+      <a href="#conclusions">Выводы</a>
+      <a href="#quiz">Тест</a>
+      <a href="#sources">Источники</a>
+    </div>
+  </div>
+</nav>
+
+<div class="titre">
+  <div class="titre-inner">
+    <div class="titre-label">Индивидуальное задание · Электронный образовательный ресурс</div>
+    <div class="titre-title">Анализ современных технологий<br>адаптации персонала</div>
+    <div class="titre-meta">
+      <span>Автор: <strong>Богданова Елизавета</strong></span>
+      <span>Группа: <strong>М-31</strong></span>
+      <span>Дисциплина: <strong>Управление персоналом</strong></span>
+      <span>Направление: <strong>Менеджмент</strong></span>
+      <span>Вуз: <strong>НИУ МИЭТ</strong></span>
+      <span>2026</span>
+    </div>
+  </div>
+</div>
+
+<header id="top" class="hero">
+  <div class="badge">✦ Интерактивный лонгрид</div>
+  <h1>Технологии<br><span class="gradient-text">адаптации персонала</span></h1>
+  <p class="hero-sub">Как современные компании помогают новичкам вливаться в работу быстрее — и какие цифровые инструменты для этого используют.</p>
+  <div class="hero-actions">
+    <a href="#theory" class="btn btn-primary">Начать изучение →</a>
+    <a href="#quiz" class="btn btn-ghost">🎓 Пройти тест</a>
+  </div>
+</header>
+
+<section id="theory" class="section-pad">
+  <span class="section-tag">Раздел 1 · Теоретические основы</span>
+  <h2>Что нужно знать об адаптации</h2>
+  <p class="lead">Прежде чем анализировать технологии — разберёмся с понятиями. Семь подразделов: суть, 4 этапа онбординга, важность, виды, цели, аспекты, этапы, критерии. В трёх из них есть интерактивные задания.</p>
+
+  <!-- 1. Сущность -->
+  <div class="theory-block">
+    <h3>1. Сущность адаптации</h3>
+    <p><strong>Адаптация персонала</strong> — это процесс взаимного приспособления работника и организации, в результате которого сотрудник осваивает профессиональные требования, организационные правила и социальные нормы, а организация приспосабливает условия труда и управления под нового человека.</p>
+    <p>Ключевое в определении — <strong>двусторонность</strong>. Классическая кадровая модель рассматривала адаптацию односторонне: «новичок должен вписаться в компанию». Современный подход подчёркивает, что адаптация успешна, только если движутся обе стороны.</p>
+    <p>Второй важный момент — <strong>адаптация не равна испытательному сроку</strong>. Испытательный срок — юридическая процедура (ст. 70 ТК РФ), а адаптация — управленческий процесс, который может начинаться до выхода на работу (preboarding) и продолжаться после окончания испытательного срока.</p>
+
+    <div class="svg-schema">
+      <svg viewBox="0 0 560 180" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#c4b5fd"/><stop offset="100%" stop-color="#8b5cf6"/></linearGradient>
+          <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f0abfc"/><stop offset="100%" stop-color="#c084fc"/></linearGradient>
+          <marker id="arrow1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#7c3aed"/></marker>
+        </defs>
+        <rect x="20" y="55" width="160" height="70" rx="14" fill="url(#g1)"/>
+        <text x="100" y="88" text-anchor="middle" fill="#fff" font-weight="700" font-size="15" font-family="sans-serif">Работник</text>
+        <text x="100" y="108" text-anchor="middle" fill="#ede9fe" font-size="12" font-family="sans-serif">осваивает среду</text>
+        <rect x="380" y="55" width="160" height="70" rx="14" fill="url(#g2)"/>
+        <text x="460" y="88" text-anchor="middle" fill="#fff" font-weight="700" font-size="15" font-family="sans-serif">Организация</text>
+        <text x="460" y="108" text-anchor="middle" fill="#fae8ff" font-size="12" font-family="sans-serif">меняет условия</text>
+        <path d="M 195 75 Q 280 40 365 75" stroke="#7c3aed" stroke-width="2.5" fill="none" marker-end="url(#arrow1)"/>
+        <path d="M 365 105 Q 280 140 195 105" stroke="#7c3aed" stroke-width="2.5" fill="none" marker-end="url(#arrow1)"/>
+        <text x="280" y="32" text-anchor="middle" fill="#6d28d9" font-weight="700" font-size="12" font-family="sans-serif">адаптация = взаимное приспособление</text>
+      </svg>
+    </div>
+
+    <h4 style="font-size:16px;margin:22px 0 12px;color:var(--primary-dark);">4 этапа современного онбординга</h4>
+    <p>Современный онбординг — это не «первый день в офисе», а управляемый процесс длиной 3–6 месяцев. Он включает четыре этапа:</p>
+    <div class="svg-schema">
+      <svg viewBox="0 0 700 160" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="stageGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#ede9fe"/><stop offset="100%" stop-color="#f0abfc"/>
+          </linearGradient>
+        </defs>
+        <rect x="10" y="30" width="155" height="100" rx="14" fill="url(#stageGrad)" stroke="#8b5cf6" stroke-width="2"/>
+        <text x="87" y="58" text-anchor="middle" font-size="26" font-family="sans-serif">📩</text>
+        <text x="87" y="85" text-anchor="middle" fill="#4c1d95" font-weight="700" font-size="13" font-family="sans-serif">Preboarding</text>
+        <text x="87" y="105" text-anchor="middle" fill="#6b6280" font-size="11" font-family="sans-serif">до 1-го дня</text>
+
+        <path d="M 168 80 L 182 80" stroke="#8b5cf6" stroke-width="2.5" marker-end="url(#arrow1)"/>
+
+        <rect x="185" y="30" width="155" height="100" rx="14" fill="url(#stageGrad)" stroke="#8b5cf6" stroke-width="2"/>
+        <text x="262" y="58" text-anchor="middle" font-size="26" font-family="sans-serif">🎯</text>
+        <text x="262" y="85" text-anchor="middle" fill="#4c1d95" font-weight="700" font-size="13" font-family="sans-serif">Ориентация</text>
+        <text x="262" y="105" text-anchor="middle" fill="#6b6280" font-size="11" font-family="sans-serif">1-я неделя</text>
+
+        <path d="M 343 80 L 357 80" stroke="#8b5cf6" stroke-width="2.5" marker-end="url(#arrow1)"/>
+
+        <rect x="360" y="30" width="155" height="100" rx="14" fill="url(#stageGrad)" stroke="#8b5cf6" stroke-width="2"/>
+        <text x="437" y="58" text-anchor="middle" font-size="26" font-family="sans-serif">📚</text>
+        <text x="437" y="85" text-anchor="middle" fill="#4c1d95" font-weight="700" font-size="13" font-family="sans-serif">Погружение</text>
+        <text x="437" y="105" text-anchor="middle" fill="#6b6280" font-size="11" font-family="sans-serif">1-й месяц</text>
+
+        <path d="M 518 80 L 532 80" stroke="#8b5cf6" stroke-width="2.5" marker-end="url(#arrow1)"/>
+
+        <rect x="535" y="30" width="155" height="100" rx="14" fill="url(#stageGrad)" stroke="#8b5cf6" stroke-width="2"/>
+        <text x="612" y="58" text-anchor="middle" font-size="26" font-family="sans-serif">🚀</text>
+        <text x="612" y="85" text-anchor="middle" fill="#4c1d95" font-weight="700" font-size="13" font-family="sans-serif">Интеграция</text>
+        <text x="612" y="105" text-anchor="middle" fill="#6b6280" font-size="11" font-family="sans-serif">3–6 месяцев</text>
+      </svg>
+    </div>
+
+    <div class="callout">
+      <p><strong>Вывод:</strong> адаптация — не «новичок должен вписаться», а двусторонний процесс, который начинается до первого дня и длится несколько месяцев.</p>
+    </div>
+  </div>
+
+  <!-- 2. Почему это важно -->
+  <div class="theory-block">
+    <h3>2. Почему это важно</h3>
+    <p>Адаптация — не «мягкая» тема про комфорт новичка, а управленческая задача с измеримым эффектом на бизнес. Вот четыре причины, почему компании инвестируют в современный онбординг.</p>
+
+    <div class="why-list">
+      <div class="why-item">
+        <div class="why-num">1</div>
+        <div>
+          <h4>Снижает текучесть на испытательном сроке</h4>
+          <p>Структурированный онбординг повышает удержание новых сотрудников. По данным SHRM (Bauer, 2010), до 69% новичков уходят в первые полгода, если адаптация не выстроена. Хороший онбординг снижает этот показатель в разы.</p>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-num">2</div>
+        <div>
+          <h4>Ускоряет выход на плановую продуктивность</h4>
+          <p>Time-to-productivity — ключевая метрика. Новичок, прошедший структурированную адаптацию, выходит на плановые показатели на 1–2 месяца быстрее, чем без неё.</p>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-num">3</div>
+        <div>
+          <h4>Формирует лояльность с первого дня</h4>
+          <p>Первые впечатления определяют отношение к работодателю надолго. Хороший старт = высокая вовлечённость и готовность рекомендовать компанию.</p>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-num">4</div>
+        <div>
+          <h4>Разгружает наставников и HR</h4>
+          <p>Грамотный онбординг автоматизирует типовые вопросы, освобождая время опытных сотрудников для действительно важных задач.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <p><strong>Вывод:</strong> адаптация — это инвестиция с измеримым возвратом: меньше текучести, быстрее продуктивность, выше лояльность, ниже нагрузка на HR.</p>
+    </div>
+  </div>
+
+  <!-- 3. Виды адаптации -->
+  <div class="theory-block">
+    <h3>3. Виды адаптации</h3>
+    <p>В учебной литературе адаптацию классифицируют по нескольким независимым основаниям. Для практики важны три оси.</p>
+    <p><strong>Ось 1: первичная / вторичная.</strong> <strong>Первичная</strong> — у человека нет опыта работы (выпускник). <strong>Вторичная</strong> — опыт есть, но условия новые (новая должность, коллектив, компания).</p>
+    <p><strong>Ось 2: активная / пассивная.</strong> <strong>Активная</strong> — сотрудник воздействует на среду: предлагает изменения, приносит свой опыт. <strong>Пассивная</strong> — принимает среду как данность, не пытаясь её изменить.</p>
+    <p><strong>Ось 3: прогрессивная / регрессивная.</strong> <strong>Прогрессивная</strong> — адаптация к среде с положительным содержанием (развитие, рост). <strong>Регрессивная</strong> — к среде с отрицательным содержанием (токсичная культура).</p>
+
+    <div class="interactive-box">
+      <div class="interactive-title">🎮 Интерактив · Определи вид адаптации</div>
+      <div id="typesGame"></div>
+    </div>
+
+    <div class="callout">
+      <p><strong>Вывод:</strong> одна ситуация может быть разной по разным осям. Выпускник, предлагающий изменения, — первичная активная. Опытный менеджер, молча принявший правила, — вторичная пассивная.</p>
+    </div>
+  </div>
+
+  <!-- 4. Цели адаптации -->
+  <div class="theory-block">
+    <h3>4. Цели адаптации — с двух сторон</h3>
+    <p>У компании и у сотрудника разные цели, и это нормально. Управление адаптацией — это поиск пересечения.</p>
+    <table class="mini-table">
+      <thead><tr><th>Сторона</th><th>Цели</th></tr></thead>
+      <tbody>
+        <tr><td>Компания</td><td>Быстрый выход на плановую производительность; снижение текучести; минимизация издержек на подбор; формирование лояльности; снижение нагрузки на наставников</td></tr>
+        <tr><td>Сотрудник</td><td>Комфортная интеграция в коллектив; понимание правил и ожиданий; снижение тревожности; освоение навыков; карьерная перспектива</td></tr>
+      </tbody>
+    </table>
+    <p>Современные технологии адаптации работают на <strong>обе группы целей одновременно</strong>. Бадди-система снижает тревожность новичка и разгружает HR. Платформа онбординга ускоряет выход на продуктивность и даёт прозрачность.</p>
+    <div class="callout">
+      <p><strong>Вывод:</strong> если технология закрывает только цели компании, новичок её саботирует. Если только цели сотрудника — она не окупается.</p>
+    </div>
+  </div>
+
+  <!-- 5. Аспекты -->
+  <div class="theory-block">
+    <h3>5. Аспекты адаптации</h3>
+    <p>Адаптация не сводится к освоению обязанностей. В ней <strong>четыре стороны</strong>, и каждая может «провалиться» отдельно — даже если остальные три в порядке.</p>
+
+    <div class="svg-schema">
+      <svg viewBox="0 0 700 200" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="asp1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ede9fe"/><stop offset="100%" stop-color="#c4b5fd"/></linearGradient>
+          <linearGradient id="asp2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fae8ff"/><stop offset="100%" stop-color="#f0abfc"/></linearGradient>
+          <linearGradient id="asp3" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#e0e7ff"/><stop offset="100%" stop-color="#a5b4fc"/></linearGradient>
+          <linearGradient id="asp4" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fce7f3"/><stop offset="100%" stop-color="#f9a8d4"/></linearGradient>
+        </defs>
+        <rect x="10" y="30" width="160" height="140" rx="16" fill="url(#asp1)" stroke="#8b5cf6" stroke-width="1.5"/>
+        <text x="90" y="70" text-anchor="middle" font-size="30" font-family="sans-serif">🎓</text>
+        <text x="90" y="100" text-anchor="middle" fill="#4c1d95" font-weight="700" font-size="12" font-family="sans-serif">Профессиональная</text>
+        <text x="90" y="125" text-anchor="middle" fill="#6b6280" font-size="10.5" font-family="sans-serif">навыки, инструменты</text>
+        <text x="90" y="143" text-anchor="middle" fill="#6b6280" font-size="10.5" font-family="sans-serif">методы работы</text>
+
+        <rect x="180" y="30" width="160" height="140" rx="16" fill="url(#asp2)" stroke="#a855f7" stroke-width="1.5"/>
+        <text x="260" y="70" text-anchor="middle" font-size="30" font-family="sans-serif">🏢</text>
+        <text x="260" y="100" text-anchor="middle" fill="#4c1d95" font-weight="700" font-size="12" font-family="sans-serif">Организационная</text>
+        <text x="260" y="125" text-anchor="middle" fill="#6b6280" font-size="10.5" font-family="sans-serif">структура, процедуры</text>
+        <text x="260" y="143" text-anchor="middle" fill="#6b6280" font-size="10.5" font-family="sans-serif">каналы коммуникации</text>
+
+        <rect x="350" y="30" width="160" height="140" rx="16" fill="url(#asp3)" stroke="#6366f1" stroke-width="1.5"/>
+        <text x="430" y="70" text-anchor="middle" font-size="30" font-family="sans-serif">👥</text>
+        <text x="430" y="100" text-anchor="middle" fill="#4c1d95" font-weight="700" font-size="12" font-family="sans-serif">Соц.-психол.</text>
+        <text x="430" y="125" text-anchor="middle" fill="#6b6280" font-size="10.5" font-family="sans-serif">коллектив, нормы</text>
+        <text x="430" y="143" text-anchor="middle" fill="#6b6280" font-size="10.5" font-family="sans-serif">ценности</text>
+
+        <rect x="520" y="30" width="160" height="140" rx="16" fill="url(#asp4)" stroke="#ec4899" stroke-width="1.5"/>
+        <text x="600" y="70" text-anchor="middle" font-size="30" font-family="sans-serif">💪</text>
+        <text x="600" y="100" text-anchor="middle" fill="#4c1d95" font-weight="700" font-size="12" font-family="sans-serif">Психофизиол.</text>
+        <text x="600" y="125" text-anchor="middle" fill="#6b6280" font-size="10.5" font-family="sans-serif">нагрузки, режим</text>
+        <text x="600" y="143" text-anchor="middle" fill="#6b6280" font-size="10.5" font-family="sans-serif">условия труда</text>
+      </svg>
+    </div>
+
+    <p><strong>Связь с технологиями:</strong> микрообучение → профессиональная. Бадди-система → социально-психологическая. Платформа и чек-листы → организационная. VR → профессиональная и психофизиологическая. Чат-бот → организационная.</p>
+
+    <div class="interactive-box">
+      <div class="interactive-title">🎮 Интерактив · Какой аспект страдает?</div>
+      <div id="aspectsGame"></div>
+    </div>
+
+    <div class="callout">
+      <p><strong>Вывод:</strong> одна технология может закрывать несколько аспектов, но ни одна не закрывает все. Поэтому в современном онбординге используют набор инструментов.</p>
+    </div>
+  </div>
+
+  <!-- 6. Этапы -->
+  <div class="theory-block">
+    <h3>6. Этапы адаптации</h3>
+    <p>Единой разбивки на этапы в литературе нет. Для практики важна не сама разбивка, а понимание, что каждая стадия требует <strong>разных инструментов</strong>.</p>
+    <p><strong>Ознакомление</strong> — человек получает информацию о среде, требованиях, правилах. Технологии: preboarding-портал, приветственное видео, чат-бот.</p>
+    <p><strong>Приспособление</strong> — привыкает к новым действиям, осваивает стереотипы поведения. Технологии: микрообучение, бадди-система, геймификация.</p>
+    <p><strong>Ассимиляция</strong> — полностью вписывается в среду, работает самостоятельно. Технологии: VR-тренажёры, чек-поинты, обратная связь.</p>
+    <p><strong>Идентификация</strong> — личные цели совпадают с целями организации. Технологии: аналитика онбординга, опросы eNPS, план развития.</p>
+    <p><strong>Ключевой тезис:</strong> технология работает, только если встроена в нужный этап. VR на стадии ознакомления бесполезен. Чат-бот на стадии идентификации уже не нужен.</p>
+
+    <div class="interactive-box">
+      <div class="interactive-title">🎮 Интерактив · Расставь этапы по порядку</div>
+      <div id="stagesGame"></div>
+    </div>
+
+    <div class="callout">
+      <p><strong>Вывод:</strong> не бывает «универсально хорошей» технологии. Бывает технология, встроенная в правильный этап, — и тогда она работает.</p>
+    </div>
+  </div>
+
+  <!-- 7. Критерии -->
+  <div class="theory-block">
+    <h3>7. Критерии успешной адаптации</h3>
+    <p>Адаптация считается успешной, если выполнены <strong>объективные</strong> и <strong>субъективные</strong> критерии.</p>
+    <table class="mini-table">
+      <thead><tr><th>Тип</th><th>Критерии</th></tr></thead>
+      <tbody>
+        <tr><td>Объективные</td><td>Выход на плановую производительность в срок (time-to-productivity); отсутствие ошибок критического уровня; прохождение аттестации с первого раза; сохранение сотрудника через 3 и 6 месяцев</td></tr>
+        <tr><td>Субъективные</td><td>Удовлетворённость работой и коллективом (eNPS); отсутствие тревожности; готовность рекомендовать компанию; понимание своих задач</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Ключевой тезис:</strong> без метрик адаптация управляется «на глаз» — а значит, не управляется вообще. Аналитические технологии — не «дополнение», а обязательный элемент.</p>
+    <div class="callout">
+      <p><strong>Вывод:</strong> если компания не измеряет адаптацию, она не знает, работает ли её программа. Метрики — условие управления.</p>
+    </div>
+  </div>
+</section>
+
+<section id="tech" class="section-pad" style="background: var(--bg-alt);">
+  <span class="section-tag">Раздел 2 · Технологии</span>
+  <h2>9 современных технологий</h2>
+  <p class="lead">Сгруппированы по назначению. Нажми на карточку — перевернётся с кратким описанием и кейсом. Если что-то непонятно — ниже есть кнопка с полными описаниями.</p>
+
+  <div class="subtabs-nav">
+    <button class="subtab-btn active" data-subtab="learn">🎓 Обучение</button>
+    <button class="subtab-btn" data-subtab="comm">💬 Коммуникация</button>
+    <button class="subtab-btn" data-subtab="analytics">📊 Аналитика</button>
+  </div>
+
+  <div class="subtab-panel active" data-subtab-panel="learn">
+    <div class="tech-grid">
+      <div class="tech-card">
+        <div class="tech-inner">
+          <div class="tech-face tech-front">
+            <div><div class="tech-icon">🎯</div><span class="tech-cat">Обучение</span></div>
+            <h3>Микрообучение</h3>
+            <span class="tech-hint">Что это? →</span>
+          </div>
+          <div class="tech-face tech-back">
+            <h3>Подробнее</h3>
+            <p>Короткие модули 3–7 минут: видео, карточки, мини-тесты. Встраивается в рабочий день, снижает перегрузку.</p>
+            <div class="case">Прирост производительности до 23% (исследование по электроэнергетике).</div>
+          </div>
+        </div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-inner">
+          <div class="tech-face tech-front">
+            <div><div class="tech-icon">🥽</div><span class="tech-cat">Обучение</span></div>
+            <h3>VR/AR-тренажёры</h3>
+            <span class="tech-hint">Что это? →</span>
+          </div>
+          <div class="tech-face tech-back">
+            <h3>Подробнее</h3>
+            <p>Безопасная отработка навыков: работа с оборудованием, действия в ЧС, коммуникация с клиентом.</p>
+            <div class="case">«Золотое Яблоко»: адаптация с недель до дней, продажи +25%.</div>
+          </div>
+        </div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-inner">
+          <div class="tech-face tech-front">
+            <div><div class="tech-icon">🎮</div><span class="tech-cat">Обучение</span></div>
+            <h3>Геймификация</h3>
+            <span class="tech-hint">Что это? →</span>
+          </div>
+          <div class="tech-face tech-back">
+            <h3>Подробнее</h3>
+            <p>Квесты, баллы, уровни, симуляции. Повышает вовлечённость и запоминаемость, особенно у молодых сотрудников.</p>
+            <div class="case">«Абсолют Банк»: текучесть −5%, обращения к HR −90%.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="subtab-panel" data-subtab-panel="comm">
+    <div class="tech-grid">
+      <div class="tech-card">
+        <div class="tech-inner">
+          <div class="tech-face tech-front">
+            <div><div class="tech-icon">👥</div><span class="tech-cat">Коммуникация</span></div>
+            <h3>Бадди-система</h3>
+            <span class="tech-hint">Что это? →</span>
+          </div>
+          <div class="tech-face tech-back">
+            <h3>Подробнее</h3>
+            <p>За новичком закрепляется опытный коллега-бадди. Дополняется цифровым сопровождением.</p>
+            <div class="case">Яндекс: 10 338 сотрудников-бадди в 2025 году.</div>
+          </div>
+        </div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-inner">
+          <div class="tech-face tech-front">
+            <div><div class="tech-icon">🤖</div><span class="tech-cat">Коммуникация</span></div>
+            <h3>ИИ-чат-боты</h3>
+            <span class="tech-hint">Что это? →</span>
+          </div>
+          <div class="tech-face tech-back">
+            <h3>Подробнее</h3>
+            <p>Отвечают на типовые вопросы новичка 24/7: доступы, отпуск, контакты. Разгружают HR и наставников.</p>
+            <div class="case">Применяется в крупных компаниях с потоком новичков.</div>
+          </div>
+        </div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-inner">
+          <div class="tech-face tech-front">
+            <div><div class="tech-icon">💬</div><span class="tech-cat">Коммуникация</span></div>
+            <h3>Корпоративные соцсети</h3>
+            <span class="tech-hint">Что это? →</span>
+          </div>
+          <div class="tech-face tech-back">
+            <h3>Подробнее</h3>
+            <p>Платформы Slack, Teams, «Дамаск» помогают знакомиться с коллегами и вливаться в неформальную культуру.</p>
+            <div class="case">Широко применяется в IT и телекоме.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="subtab-panel" data-subtab-panel="analytics">
+    <div class="tech-grid">
+      <div class="tech-card">
+        <div class="tech-inner">
+          <div class="tech-face tech-front">
+            <div><div class="tech-icon">📱</div><span class="tech-cat">Аналитика</span></div>
+            <h3>Платформы онбординга</h3>
+            <span class="tech-hint">Что это? →</span>
+          </div>
+          <div class="tech-face tech-back">
+            <h3>Подробнее</h3>
+            <p>Единое окно: задачи на первый месяц, документы, курсы, контакты. Прозрачный прогресс для новичка и HR.</p>
+            <div class="case">«Абсолют Банк»: время оформления −17%.</div>
+          </div>
+        </div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-inner">
+          <div class="tech-face tech-front">
+            <div><div class="tech-icon">📊</div><span class="tech-cat">Аналитика</span></div>
+            <h3>Метрики онбординга</h3>
+            <span class="tech-hint">Что это? →</span>
+          </div>
+          <div class="tech-face tech-back">
+            <h3>Подробнее</h3>
+            <p>Time-to-productivity, текучесть в первые 3–6 месяцев, eNPS новичков, результаты чек-поинтов.</p>
+            <div class="case">Без цифр невозможно понять, работает ли адаптация.</div>
+          </div>
+        </div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-inner">
+          <div class="tech-face tech-front">
+            <div><div class="tech-icon">📝</div><span class="tech-cat">Аналитика</span></div>
+            <h3>Опросы и чек-поинты</h3>
+            <span class="tech-hint">Что это? →</span>
+          </div>
+          <div class="tech-face tech-back">
+            <h3>Подробнее</h3>
+            <p>Короткие опросы на 1-й неделе, 1-м и 3-м месяце. Помогают вовремя выявить проблемы и удержать новичка.</p>
+            <div class="case">Стандарт в крупных компаниях.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="expand-wrap">
+    <button class="expand-btn" id="expandBtn">📖 Если что-то непонятно — полные описания всех 9 технологий</button>
+    <div class="full-descriptions" id="fullDescriptions">
+      <div class="full-desc-item">
+        <h4>🎯 Микрообучение<span class="full-desc-cat">Обучение</span></h4>
+        <p>Формат обучения, при котором материал разбит на короткие модули длительностью 3–7 минут: видео, карточки, мини-тесты, короткие статьи. Встраивается в рабочий день — новичок проходит их в перерывах с телефона, не отвлекаясь от задач на несколько часов.</p>
+        <p><strong>Почему работает:</strong> соответствует когнитивным особенностям взрослых (удержание внимания 5–10 минут), снижает перегрузку и позволяет возвращаться к материалу повторно.</p>
+        <div class="full-desc-case"><strong>Кейс:</strong> исследование по электроэнергетическим компаниям показало прирост производительности труда на 23% после внедрения микрообучения в адаптацию.</div>
+      </div>
+
+      <div class="full-desc-item">
+        <h4>🥽 VR/AR-тренажёры<span class="full-desc-cat">Обучение</span></h4>
+        <p>Виртуальная и дополненная реальность для отработки навыков в безопасной среде. Позволяет моделировать ситуации, которые опасно или дорого воспроизводить в реальности: работа с оборудованием, действия при пожаре, коммуникация с конфликтным клиентом.</p>
+        <p><strong>Почему работает:</strong> ошибка в VR не стоит компании денег и не угрожает безопасности. Новичок может повторять сценарий до автоматизма.</p>
+        <div class="full-desc-case"><strong>Кейс:</strong> «Золотое Яблоко» внедрило VR-платформу с 372 симуляциями и виртуальным наставником — сроки адаптации консультантов сократились с недель до нескольких дней, продажи выросли на 25%.</div>
+      </div>
+
+      <div class="full-desc-item">
+        <h4>🎮 Геймификация<span class="full-desc-cat">Обучение</span></h4>
+        <p>Использование игровых механик (баллы, уровни, квесты, бейджи, соревнования, внутренняя валюта) в неигровых процессах. В онбординге — для повышения вовлечённости и мотивации проходить этапы адаптации.</p>
+        <p><strong>Почему работает:</strong> даёт ощущение прогресса и награды, особенно эффективна для молодых сотрудников и массовых позиций.</p>
+        <div class="full-desc-case"><strong>Кейс:</strong> «Абсолют Банк» внедрил «Поток Адаптация» с игровым форматом — текучесть в первые 3 месяца снизилась на 5%, обращения к рекрутерам — на 90%, успешные аттестации выросли на 20%.</div>
+      </div>
+
+      <div class="full-desc-item">
+        <h4>👥 Бадди-система<span class="full-desc-cat">Коммуникация</span></h4>
+        <p>Закрепление за новичком опытного коллеги («бадди»), который помогает с бытовыми и рабочими вопросами: где что находится, к кому обратиться, как принято в компании. В отличие от наставника, бадди отвечает не за профессиональное развитие, а за комфортную интеграцию.</p>
+        <p><strong>Почему работает:</strong> снижает тревожность, ускоряет социально-психологическую адаптацию, разгружает HR и руководителя.</p>
+        <div class="full-desc-case"><strong>Кейс:</strong> Яндекс в 2025 году задействовал 10 338 сотрудников-бадди; проводится Buddy Fest для обмена опытом.</div>
+      </div>
+
+      <div class="full-desc-item">
+        <h4>🤖 ИИ-чат-боты<span class="full-desc-cat">Коммуникация</span></h4>
+        <p>Виртуальный помощник, который отвечает на типовые вопросы новичка 24/7: «где взять доступ?», «как оформить отпуск?», «к кому идти с вопросом?». Работает в мессенджере или на портале.</p>
+        <p><strong>Почему работает:</strong> снимает с HR и наставников рутинные вопросы, даёт новичку мгновенный ответ без ожидания.</p>
+        <div class="full-desc-case"><strong>Кейс:</strong> применяется в крупных компаниях с высоким потоком новичков — Сбер, МТС, ритейл.</div>
+      </div>
+
+      <div class="full-desc-item">
+        <h4>💬 Корпоративные соцсети<span class="full-desc-cat">Коммуникация</span></h4>
+        <p>Внутренние платформы для общения сотрудников: Slack, Microsoft Teams, «Дамаск», Workplace. Помогают новичку быстро познакомиться с коллегами, найти нужного эксперта, влиться в неформальную культуру.</p>
+        <p><strong>Почему работает:</strong> снижает барьер общения, ускоряет нетворкинг, помогает найти ответ на вопрос через коллег.</p>
+        <div class="full-desc-case"><strong>Кейс:</strong> широко применяется в IT и телекоме — стандарт для распределённых команд.</div>
+      </div>
+
+      <div class="full-desc-item">
+        <h4>📱 Платформы онбординга<span class="full-desc-cat">Аналитика</span></h4>
+        <p>Специализированный сервис или модуль HR-системы, который собирает всё для новичка в одном окне: задачи на первый месяц, документы, обучающие курсы, контакты коллег и наставника. Даёт прозрачный прогресс и новичку, и HR.</p>
+        <p><strong>Почему работает:</strong> заменяет разрозненные письма и файлы единой системой, снижает нагрузку на HR, даёт метрики.</p>
+        <div class="full-desc-case"><strong>Кейс:</strong> «Абсолют Банк» через платформу «Поток» сократил время оформления нового сотрудника на 17%.</div>
+      </div>
+
+      <div class="full-desc-item">
+        <h4>📊 Метрики онбординга<span class="full-desc-cat">Аналитика</span></h4>
+        <p>Система показателей, которая позволяет измерить эффективность адаптации: time-to-productivity (время до плановой продуктивности), текучесть в первые 3–6 месяцев, eNPS новичков (индекс лояльности), результаты чек-поинтов, доля прошедших аттестацию с первого раза.</p>
+        <p><strong>Почему работает:</strong> без метрик невозможно понять, работает ли программа адаптации, и где узкие места.</p>
+        <div class="full-desc-case"><strong>Кейс:</strong> стандарт в крупных компаниях — МТС, Яндекс, Сбер.</div>
+      </div>
+
+      <div class="full-desc-item">
+        <h4>📝 Опросы и чек-поинты<span class="full-desc-cat">Аналитика</span></h4>
+        <p>Короткие структурированные опросы и встречи с новичком на контрольных точках: конец 1-й недели, 1-го месяца, 3-го месяца. Помогают вовремя выявить проблемы (перегрузка, непонимание задач, конфликты) и удержать сотрудника.</p>
+        <p><strong>Почему работает:</strong> проблема, выявленная на 1-й неделе, стоит дешевле, чем увольнение на испытательном сроке.</p>
+        <div class="full-desc-case"><strong>Кейс:</strong> «Абсолют Банк» — чек-поинты встроены в игровой формат онбординга.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="analysis" class="section-pad">
+  <span class="section-tag">Раздел 3 · Сравнительный анализ</span>
+  <h2>Сравнение технологий и кейсы компаний</h2>
+  <p class="lead">Сравнительная матрица показывает, какие технологии на какой аспект работают и когда их применять. Ниже — проверенные кейсы компаний и плюсы/минусы внедрения.</p>
+
+  <h3>📋 Сравнительная матрица технологий</h3>
+  <div class="matrix-wrap">
+    <table class="matrix">
+      <thead>
+        <tr><th>Технология</th><th>Аспект</th><th>Затраты</th><th>Скорость эффекта</th><th>Когда применять</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Микрообучение</td><td>Профессиональный</td><td><span class="pill low">Низкие</span></td><td><span class="pill fast">Быстро</span></td><td>Всегда — базовый инструмент</td></tr>
+        <tr><td>Геймификация</td><td>Соц.-психологич.</td><td><span class="pill mid">Средние</span></td><td><span class="pill fast">Быстро</span></td><td>Молодые сотрудники, массовые позиции</td></tr>
+        <tr><td>VR/AR-тренажёры</td><td>Профессиональный</td><td><span class="pill high">Высокие</span></td><td><span class="pill slow">Долго</span></td><td>Производство, опасные работы</td></tr>
+        <tr><td>Бадди-система</td><td>Соц.-психологич.</td><td><span class="pill low">Низкие</span></td><td><span class="pill fast">Быстро</span></td><td>Всегда — обязательный элемент</td></tr>
+        <tr><td>ИИ-чат-бот</td><td>Организационный</td><td><span class="pill mid">Средние</span></td><td><span class="pill fast">Быстро</span></td><td>При потоке 20+ новичков в месяц</td></tr>
+        <tr><td>Корп. соцсети</td><td>Соц.-психологич.</td><td><span class="pill low">Низкие</span></td><td><span class="pill mid">Средне</span></td><td>Распределённые и IT-команды</td></tr>
+        <tr><td>Платформа онбординга</td><td>Организационный</td><td><span class="pill high">Высокие</span></td><td><span class="pill mid">Средне</span></td><td>100+ новичков в год</td></tr>
+        <tr><td>Метрики + опросы</td><td>Все</td><td><span class="pill low">Низкие</span></td><td><span class="pill fast">Быстро</span></td><td>Всегда — без них нет управления</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>🏢 Проверенные кейсы компаний</h3>
+  <p>Каждый кейс подтверждён официальным отчётом компании или профильным деловым изданием.</p>
+  <div class="cases-grid">
+    <div class="case-card">
+      <div class="case-logo">📡</div>
+      <h4>МТС</h4>
+      <p>Комплексный онбординг: preboarding начинается до первого дня, наставники назначаются заранее, действует дистанционный курс адаптации.</p>
+      <div class="case-result">Удовлетворённость 2025: 98% / 90%</div>
+    </div>
+    <div class="case-card">
+      <div class="case-logo">🔍</div>
+      <h4>Яндекс</h4>
+      <p>Программа адаптации 3 месяца с отдельными треками для разных ролей. У каждого новичка — бадди. Проводится Buddy Fest.</p>
+      <div class="case-result">10 338 бадди в 2025 году</div>
+    </div>
+    <div class="case-card">
+      <div class="case-logo">🍏</div>
+      <h4>«Золотое Яблоко»</h4>
+      <p>VR-платформа с 372 симуляциями и виртуальным наставником. Обучение консультантов перенесено в VR.</p>
+      <div class="case-result">Адаптация: недели → дни; продажи +25%</div>
+    </div>
+    <div class="case-card">
+      <div class="case-logo">🏦</div>
+      <h4>«Абсолют Банк»</h4>
+      <p>Сервис «Поток Адаптация» с геймификацией: игровой формат, внутренняя валюта «рыжики», шаги адаптации.</p>
+      <div class="case-result">Текучесть −5%, обращения к HR −90%</div>
+    </div>
+  </div>
+
+  <h3>⚖️ Плюсы, минусы и критерии выбора</h3>
+  <div class="accordion">
+    <div class="acc-item">
+      <button class="acc-btn"><span>✅ Плюсы современных технологий</span><span class="acc-icon">+</span></button>
+      <div class="acc-body"><div class="acc-body-inner">
+        <ul>
+          <li>Скорость: новичок получает нужное знание моментально</li>
+          <li>Масштабируемость: одна платформа обслуживает и 10, и 10 000 новичков</li>
+          <li>Прозрачность: видны результаты каждого этапа</li>
+          <li>Вовлечённость: геймификация и микроформаты проходят охотнее лекций</li>
+          <li>Экономия: снижение текучести окупает внедрение</li>
+        </ul>
+      </div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>⚠️ Подводные камни</span><span class="acc-icon">+</span></button>
+      <div class="acc-body"><div class="acc-body-inner">
+        <ul>
+          <li>Высокая стоимость внедрения (лицензии, интеграции, обучение HR)</li>
+          <li>Не заменяет живое общение — только дополняет бадди и менеджера</li>
+          <li>Требует актуализации контента</li>
+          <li>Возможно сопротивление старшего поколения сотрудников</li>
+          <li>Риск «цифры ради цифры» без целей и метрик</li>
+        </ul>
+      </div></div>
+    </div>
+    <div class="acc-item">
+      <button class="acc-btn"><span>🎯 Как выбрать технологию</span><span class="acc-icon">+</span></button>
+      <div class="acc-body"><div class="acc-body-inner">
+        <ul>
+          <li><strong>Масштаб:</strong> 1000+ новичков/год → платформа и чат-бот; 5–10 → бадди и база знаний</li>
+          <li><strong>Тип работы:</strong> производство → VR; офис → микрообучение и платформа</li>
+          <li><strong>Цели:</strong> снизить текучесть → чек-поинты; ускорить продуктивность → микрокурсы и бадди</li>
+        </ul>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<section id="conclusions" class="section-pad" style="background: var(--bg-alt);">
+  <span class="section-tag">Раздел 4 · Выводы</span>
+  <h2>Выводы по теме</h2>
+  <p class="lead">Главные тезисы, цели и задачи, которые были решены в ходе анализа.</p>
+
+  <div class="conclusions">
+    <h3>🐧 Главные тезисы</h3>
+    <div class="concl-list">
+      <div class="concl-item">
+        <div class="concl-num">1</div>
+        <p><strong>Адаптация — это не «первый день», а управляемый процесс</strong> длиной 3–6 месяцев, включающий preboarding, ориентацию, погружение и интеграцию. Технологии работают, только если встроены в каждый этап.</p>
+      </div>
+      <div class="concl-item">
+        <div class="concl-num">2</div>
+        <p><strong>Технологии нужно подбирать, а не копировать.</strong> Универсального «лучшего» решения нет: VR оправдан на производстве, но избыточен в офисе; бадди-система нужна всегда, а платформа — только при потоке 100+ новичков в год.</p>
+      </div>
+      <div class="concl-item">
+        <div class="concl-num">3</div>
+        <p><strong>Технологии не заменяют людей, а усиливают их.</strong> Кейсы МТС, Яндекса, «Золотого Яблока» и «Абсолют Банка» подтверждают: максимальный эффект достигается при сочетании цифровых инструментов с живым наставничеством.</p>
+      </div>
+      <div class="concl-item">
+        <div class="concl-num">4</div>
+        <p><strong>Без метрик нет управления онбордингом.</strong> Time-to-productivity, текучесть, eNPS и чек-поинты — обязательный минимум для оценки и улучшения процесса.</p>
+      </div>
+      <div class="concl-item">
+        <div class="concl-num">5</div>
+        <p><strong>Эффект подтверждён на практике:</strong> «Золотое Яблоко» сократило адаптацию с недель до дней и подняло продажи на 25%, «Абсолют Банк» снизил текучесть на 5% и обращения к HR на 90%, МТС достиг 98% удовлетворённости адаптацией.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="tasks-box">
+    <h3>🎯 Цели и задачи, решённые в ЭОР</h3>
+    <p><strong>Цель работы:</strong> проанализировать современные технологии адаптации персонала и оценить их применимость в российских компаниях.</p>
+    <p style="margin-top:14px;"><strong>Задачи:</strong></p>
+    <div class="task-list">
+      <div class="task-item"><div class="task-check">✓</div><p>Раскрыть понятие адаптации, её виды, аспекты и этапы на основе учебной литературы</p></div>
+      <div class="task-item"><div class="task-check">✓</div><p>Систематизировать современные технологии адаптации по трём категориям: обучение, коммуникация, аналитика</p></div>
+      <div class="task-item"><div class="task-check">✓</div><p>Провести сравнительный анализ технологий по аспектам, затратам и скорости эффекта</p></div>
+      <div class="task-item"><div class="task-check">✓</div><p>Рассмотреть реальные кейсы компаний (МТС, Яндекс, «Золотое Яблоко», «Абсолют Банк») и подтвердить эффект внедрения</p></div>
+      <div class="task-item"><div class="task-check">✓</div><p>Определить критерии выбора технологий в зависимости от масштаба, отрасли и целей компании</p></div>
+      <div class="task-item"><div class="task-check">✓</div><p>Сформулировать рекомендации по внедрению современных технологий адаптации</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="quiz" class="section-pad">
+  <span class="section-tag">Раздел 5 · Проверка знаний</span>
+  <h2>Тест на 10 вопросов</h2>
+  <p class="lead">Проверь себя. За 8+ правильных ответов — сертификат о прохождении.</p>
+  <div id="quizWrap" class="quiz-wrap"></div>
+  <div class="quiz-score" id="quizScore"></div>
+</section>
+
+<section id="certificate-area">
+  <div id="cert-canvas-wrap"></div>
+</section>
+
+<section id="sources" class="section-pad" style="background: var(--bg-alt);">
+  <span class="section-tag">Раздел 6 · Список литературы</span>
+  <h2>Использованные источники</h2>
+  <p class="lead">9 проверенных источников: учебники, научные статьи, официальные отчёты компаний и профильные деловые издания. По каждому есть рабочая ссылка.</p>
+  <div class="sources-list">
+    <div class="source-item"><div class="source-num">1</div><p>Исаева О. М., Припорова Е. А. Управление персоналом: учебник и практикум для СПО. — 2-е изд. — М.: Юрайт, 2026. — 172 с. — URL: <a href="https://urait.ru/bcode/584588" target="_blank">urait.ru/bcode/584588</a></p></div>
+    <div class="source-item"><div class="source-num">2</div><p>Луферова Е. В., Мазаева Н. П. Профессиональная адаптация персонала: сущность и особенности // CyberLeninka. — URL: <a href="https://cyberleninka.ru/article/n/professionalnaya-adaptatsiya-personala-suschnost-i-osobennosti" target="_blank">cyberleninka.ru</a></p></div>
+    <div class="source-item"><div class="source-num">3</div><p>Ободовская А. В. Этапы адаптации персонала // Молодой учёный. — 2026. — URL: <a href="https://moluch.ru/archive/648/141818" target="_blank">moluch.ru</a></p></div>
+    <div class="source-item"><div class="source-num">4</div><p>Адаптация персонала: этапы, виды, методы и инструменты // Предприниматель.ru. — URL: <a href="https://predprinimatel.ru/articles/staff-adaptation/" target="_blank">predprinimatel.ru/articles/staff-adaptation</a></p></div>
+    <div class="source-item"><div class="source-num">5</div><p>Новому сотруднику: как выстроить адаптацию на рабочем месте // Eduson Academy. — URL: <a href="https://blog.eduson.academy/articles/hr/novomu-sotrudniku-kak-vystroit-adaptatsiyu-na-rabochem-meste/" target="_blank">blog.eduson.academy</a></p></div>
+    <div class="source-item"><div class="source-num">6</div><p>Отчёт об устойчивом развитии ПАО «МТС» за 2025 год. — URL: <a href="https://ar2025.mts.ru/esg-i-ustojchivoe-razvitie/soczialnaya-otvetstvennost-i-dei/" target="_blank">ar2025.mts.ru</a></p></div>
+    <div class="source-item"><div class="source-num">7</div><p>Отчёт об устойчивом развитии Яндекса за 2025 год. — URL: <a href="https://help.yandex.ru/s3static/docs/sustainability-report-2025.pdf" target="_blank">help.yandex.ru</a></p></div>
+    <div class="source-item"><div class="source-num">8</div><p>«Золотое Яблоко» внедрило VR в обучение консультантов // CNews. — 29.04.2025. — URL: <a href="https://www.cnews.ru/news/line/2025-04-29_vr_supersonic_vnedrila_virtualnuyu" target="_blank">cnews.ru</a></p></div>
+    <div class="source-item"><div class="source-num">9</div><p>Кейс «Абсолют Банк»: улучшение адаптации сотрудников // Поток. — 2025. — URL: <a href="https://potok.io/blog/hr-cases/case-adaptation-absolute-bank/" target="_blank">potok.io</a></p></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <h4>Об ЭОР</h4>
+        <p>Электронный образовательный ресурс по теме «Анализ современных технологий адаптации персонала». Выполнен как индивидуальное задание по дисциплине «Управление персоналом», направление «Менеджмент».</p>
+      </div>
+      <div>
+        <h4>Разделы</h4>
+        <ul>
+          <li><a href="#theory">Теория</a></li>
+          <li><a href="#tech">Технологии</a></li>
+          <li><a href="#analysis">Анализ</a></li>
+          <li><a href="#quiz">Тест</a></li>
+          <li><a href="#sources">Источники</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Автор</h4>
+        <ul>
+          <li>Богданова Елизавета</li>
+          <li>Группа М-31</li>
+          <li>НИУ МИЭТ · 2026</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 · Богданова Е., группа М-31, НИУ МИЭТ · ЭОР создан в учебных целях</div>
+  </div>
+</footer>
+
+<div class="penguin">
+  <div class="penguin-bubble" id="penguinBubble">
+    <button class="penguin-close" id="penguinClose">×</button>
+    <span id="penguinText">Привет! Я Онбо 🐧 Твой помощник по ЭОР. Кликни на меня — расскажу, что тут есть.</span>
+  </div>
+  <div class="penguin-avatar" id="penguinAvatar">🐧<span class="penguin-name">ОНБО</span></div>
+</div>
+
+<div class="penguin-faq" id="penguinFaq">
+  <div class="faq-header"><span>🐧 Онбо отвечает</span><button id="faqClose">×</button></div>
+  <div class="faq-body">
+    <div class="faq-options" id="faqOptions"></div>
+    <div class="faq-answer" id="faqAnswer"></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="nameModal">
+  <div class="modal">
+    <h3>Как тебя зовут?</h3>
+    <p>Имя нужно для сертификата. Можно ввести любое.</p>
+    <input type="text" id="nameInput" placeholder="Имя и фамилия" maxlength="60">
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeNameModal(false)">Отмена</button>
+      <button class="btn btn-primary" onclick="closeNameModal(true)">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============ Прогресс чтения ============ */
+var readBar = document.getElementById('read-progress');
+window.addEventListener('scroll', function() {
+  var h = document.documentElement;
+  var pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  if (isFinite(pct)) readBar.style.width = pct + '%';
+});
+
+/* ============ Подвкладки ============ */
+document.querySelectorAll('.subtab-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.subtab-btn').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelectorAll('.subtab-panel').forEach(function(p) { p.classList.remove('active'); });
+    btn.classList.add('active');
+    document.querySelector('[data-subtab-panel="' + btn.dataset.subtab + '"]').classList.add('active');
+  });
+});
+
+/* ============ Flip-карточки ============ */
+document.querySelectorAll('.tech-card').forEach(function(card) {
+  card.addEventListener('click', function() { card.classList.toggle('flipped'); });
+});
+
+/* ============ Развернуть полные описания ============ */
+var expandBtn = document.getElementById('expandBtn');
+var fullDesc = document.getElementById('fullDescriptions');
+if (expandBtn) {
+  expandBtn.addEventListener('click', function() {
+    fullDesc.classList.toggle('open');
+    if (fullDesc.classList.contains('open')) {
+      expandBtn.textContent = '📖 Свернуть полные описания';
+    } else {
+      expandBtn.textContent = '📖 Если что-то непонятно — полные описания всех 9 технологий';
+    }
+  });
+}
+
+/* ============ Аккордеон ============ */
+document.querySelectorAll('.acc-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() { btn.parentElement.classList.toggle('open'); });
+});
+
+/* ============ ИНТЕРАКТИВ 1: Виды ============ */
+var typesData = [
+  { scene: 'Выпускник МИЭТ впервые вышел на работу после университета.', correct: [0, 0] },
+  { scene: 'Опытный менеджер с 10-летним стажем перешёл в новую компанию.', correct: [1, 1] },
+  { scene: 'Новичок предложил изменить процесс онбординга, потому что ему было неудобно.', correct: [0, 0] },
+  { scene: 'Сотрудник молча принял все правила, даже странные.', correct: [1, 1] }
+];
+var typesIdx = 0, typesScore = 0;
+var typesGame = document.getElementById('typesGame');
+
+function renderTypes() {
+  if (typesIdx >= typesData.length) {
+    typesGame.innerHTML = '<div class="game-result ' + (typesScore >= 3 ? 'good' : 'bad') + '">Результат: <strong>' + typesScore + ' из ' + typesData.length + '</strong>. ' +
+      (typesScore === typesData.length ? 'Отлично!' : 'Перечитай блок и попробуй снова.') + '</div>';
+    return;
+  }
+  var s = typesData[typesIdx];
+  typesGame.innerHTML =
+    '<div class="game-scenario">' + s.scene + '</div>' +
+    '<p style="font-size:12.5px;color:var(--muted);margin-bottom:8px;">Определи по двум осям:</p>' +
+    '<div class="game-options">' +
+      '<button class="game-opt" data-axis="0" data-val="0">Первичная</button>' +
+      '<button class="game-opt" data-axis="0" data-val="1">Вторичная</button>' +
+      '<button class="game-opt" data-axis="1" data-val="0">Активная</button>' +
+      '<button class="game-opt" data-axis="1" data-val="1">Пассивная</button>' +
+    '</div>' +
+    '<div class="game-feedback" id="typeFb"></div>';
+  var answers = [null, null];
+  typesGame.querySelectorAll('.game-opt').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var axis = parseInt(btn.dataset.axis), val = parseInt(btn.dataset.val);
+      answers[axis] = val;
+      typesGame.querySelectorAll('.game-opt[data-axis="' + axis + '"]').forEach(function(b) { b.classList.remove('selected'); });
+      btn.classList.add('selected');
+      if (answers[0] !== null && answers[1] !== null) {
+        typesGame.querySelectorAll('.game-opt').forEach(function(b) { b.disabled = true; });
+        var correct = answers[0] === s.correct[0] && answers[1] === s.correct[1];
+        if (correct) typesScore++;
+        var fb = document.getElementById('typeFb');
+        if (correct) fb.textContent = '✅ Верно!';
+        else fb.textContent = '❌ Правильно: ' + (s.correct[0] === 0 ? 'первичная' : 'вторичная') + ' + ' + (s.correct[1] === 0 ? 'активная' : 'пассивная');
+        fb.classList.add('show');
+        setTimeout(function() { typesIdx++; renderTypes(); }, 1800);
+      }
+    });
+  });
+}
+renderTypes();
+
+/* ============ ИНТЕРАКТИВ 2: Аспекты ============ */
+var aspectsData = [
+  { scene: 'Новичок выучил, как работать в CRM.', correct: 'Профессиональная' },
+  { scene: 'Понял, к кому идти с вопросом по отпуску.', correct: 'Организационная' },
+  { scene: 'Обедает с командой, нашёл общий язык с коллегами.', correct: 'Социально-психологическая' },
+  { scene: 'Привык к сменному графику.', correct: 'Психофизиологическая' },
+  { scene: 'Разобрался, кто в компании принимает решения.', correct: 'Организационная' },
+  { scene: 'Освоил технику безопасности на станке.', correct: 'Профессиональная' },
+  { scene: 'Перестал нервничать перед планёрками.', correct: 'Социально-психологическая' },
+  { scene: 'Адаптировался к шуму в цеху.', correct: 'Психофизиологическая' }
+];
+var aspectsIdx = 0, aspectsScore = 0;
+var aspectsGame = document.getElementById('aspectsGame');
+var aspectsOptions = ['Профессиональная', 'Организационная', 'Социально-психологическая', 'Психофизиологическая'];
+
+function renderAspects() {
+  if (aspectsIdx >= aspectsData.length) {
+    aspectsGame.innerHTML = '<div class="game-result ' + (aspectsScore >= 6 ? 'good' : 'bad') + '">Результат: <strong>' + aspectsScore + ' из ' + aspectsData.length + '</strong>. ' +
+      (aspectsScore >= 6 ? 'Отлично!' : 'Перечитай блок и попробуй снова.') + '</div>';
+    return;
+  }
+  var s = aspectsData[aspectsIdx];
+  var html = '<p style="font-size:12.5px;color:var(--muted);margin-bottom:8px;">Ситуация ' + (aspectsIdx + 1) + ' из ' + aspectsData.length + '</p>';
+  html += '<div class="game-scenario">' + s.scene + '</div>';
+  html += '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px;">';
+  aspectsOptions.forEach(function(o) { html += '<button class="game-opt" data-val="' + o + '" style="font-size:12.5px;padding:10px 12px;">' + o + '</button>'; });
+  html += '</div><div class="game-feedback" id="aspectFb"></div>';
+  aspectsGame.innerHTML = html;
+  aspectsGame.querySelectorAll('.game-opt').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      aspectsGame.querySelectorAll('.game-opt').forEach(function(b) { b.disabled = true; });
+      var correct = btn.dataset.val === s.correct;
+      btn.classList.add(correct ? 'correct' : 'wrong');
+      if (correct) aspectsScore++;
+      var fb = document.getElementById('aspectFb');
+      fb.textContent = correct ? '✅ Верно!' : '❌ Правильно: ' + s.correct;
+      fb.classList.add('show');
+      setTimeout(function() { aspectsIdx++; renderAspects(); }, 1300);
+    });
+  });
+}
+renderAspects();
+
+/* ============ ИНТЕРАКТИВ 3: Этапы ============ */
+var stagesOrder = ['Ознакомление', 'Приспособление', 'Ассимиляция', 'Идентификация'];
+var stagesDesc = {
+  'Ознакомление': 'Получение информации о среде, требованиях, правилах. Технологии: preboarding-портал, приветственное видео, чат-бот.',
+  'Приспособление': 'Привыкание к новым действиям, освоение стереотипов. Технологии: микрообучение, бадди-система, геймификация.',
+  'Ассимиляция': 'Полное вписывание в среду, самостоятельная работа. Технологии: VR-тренажёры, чек-поинты.',
+  'Идентификация': 'Совпадение личных целей с целями организации. Технологии: аналитика, eNPS, план развития.'
+};
+var stagesCurrent = ['Ассимиляция', 'Ознакомление', 'Идентификация', 'Приспособление'];
+var stagesGame = document.getElementById('stagesGame');
+
+function renderStages() {
+  var html = '<p style="font-size:12.5px;color:var(--muted);margin-bottom:10px;">Используй стрелки, чтобы расставить этапы по порядку:</p>';
+  html += '<div class="stage-sorter">';
+  stagesCurrent.forEach(function(s, i) {
+    var correctPos = stagesOrder[i] === s;
+    html += '<div class="stage-sort-item ' + (correctPos ? 'correct' : '') + '">';
+    html += '<span style="font-weight:800;color:var(--primary);">' + (i + 1) + '</span>';
+    html += '<span>' + s + '</span>';
+    html += '<div class="sorter-btns">';
+    if (i > 0) html += '<button class="sorter-arrow" data-dir="up" data-i="' + i + '">↑</button>';
+    if (i < stagesCurrent.length - 1) html += '<button class="sorter-arrow" data-dir="down" data-i="' + i + '">↓</button>';
+    html += '</div></div>';
+  });
+  html += '</div><div id="stagesFb"></div>';
+  stagesGame.innerHTML = html;
+  stagesGame.querySelectorAll('.sorter-arrow').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var i = parseInt(btn.dataset.i), dir = btn.dataset.dir;
+      var j = dir === 'up' ? i - 1 : i + 1;
+      var tmp = stagesCurrent[i]; stagesCurrent[i] = stagesCurrent[j]; stagesCurrent[j] = tmp;
+      renderStages();
+    });
+  });
+  var allCorrect = stagesCurrent.every(function(s, i) { return s === stagesOrder[i]; });
+  if (allCorrect) {
+    var fbHtml = '<div class="game-result good" style="margin-top:12px;">✅ Верно! Этапы расставлены правильно.<br><br>';
+    fbHtml += stagesOrder.map(function(s) { return '<strong>' + s + ':</strong> ' + stagesDesc[s]; }).join('<br><br>');
+    fbHtml += '</div>';
+    document.getElementById('stagesFb').innerHTML = fbHtml;
+  }
+}
+renderStages();
+
+/* ============ Тест ============ */
+var quizData = [
+  { q: 'Что такое адаптация персонала?', options: ['Процесс увольнения сотрудника', 'Процесс взаимного приспособления работника и организации', 'Юридическая процедура испытательного срока', 'Оценка после года работы'], correct: 1 },
+  { q: 'Какой пример иллюстрирует вторичную адаптацию?', options: ['Выпускник вуза впервые вышел на работу', 'Опытный менеджер перешёл в новую компанию', 'Стажёр проходит практику', 'Сотрудник уходит на пенсию'], correct: 1 },
+  { q: 'Какой аспект адаптации закрывает бадди-система?', options: ['Профессиональный', 'Социально-психологический', 'Психофизиологический', 'Организационный'], correct: 1 },
+  { q: 'Какой аспект адаптации закрывает микрообучение?', options: ['Профессиональный', 'Социально-психологический', 'Психофизиологический', 'Организационный'], correct: 0 },
+  { q: 'На каком этапе применяется preboarding?', options: ['Ознакомление', 'Приспособление', 'Ассимиляция', 'Идентификация'], correct: 0 },
+  { q: 'На каком этапе оправдано применение VR-тренажёров?', options: ['Ознакомление', 'Приспособление и ассимиляция', 'Только идентификация', 'На всех одинаково'], correct: 1 },
+  { q: 'Удовлетворённость адаптацией в МТС в 2025 году (профессиональный персонал)?', options: ['85%', '89%', '97%', '98%'], correct: 3 },
+  { q: 'Что дал VR-проект «Золотого Яблока»?', options: ['Только экономию бюджета', 'Сокращение адаптации с недель до дней и рост продаж на 25%', 'Замену всех консультантов', 'Снижение зарплат'], correct: 1 },
+  { q: 'Что дала геймификация в «Абсолют Банке»?', options: ['Снижение текучести на 5% и обращений к HR на 90%', 'Рост зарплат', 'Полную замену HR-отдела', 'Сокращение штата'], correct: 0 },
+  { q: 'В чём главный риск внедрения технологий онбординга?', options: ['Слишком быстрый результат', 'Технологии не дают эффекта без целей и метрик', 'Сотрудники учатся слишком быстро', 'Снижение стоимости обучения'], correct: 1 }
+];
+
+var quizWrap = document.getElementById('quizWrap');
+var quizScore = document.getElementById('quizScore');
+var quizAnswered = 0, quizScoreVal = 0;
+var userName = localStorage.getItem('certName') || '';
+
+quizData.forEach(function(item, qi) {
+  var block = document.createElement('div');
+  block.className = 'quiz-q';
+  block.innerHTML = '<div class="q-num">Вопрос ' + (qi + 1) + ' из ' + quizData.length + '</div><div class="q-text">' + item.q + '</div>';
+  var opts = document.createElement('div');
+  opts.className = 'options';
+  item.options.forEach(function(opt, oi) {
+    var btn = document.createElement('button');
+    btn.className = 'option';
+    btn.textContent = opt;
+    btn.addEventListener('click', function() {
+      if (block.classList.contains('done')) return;
+      block.classList.add('done');
+      quizAnswered++;
+      if (oi === item.correct) { btn.classList.add('correct'); quizScoreVal++; }
+      else { btn.classList.add('wrong'); opts.children[item.correct].classList.add('correct'); }
+      Array.prototype.forEach.call(opts.children, function(b) { b.disabled = true; });
+      updateQuizScore();
+    });
+    opts.appendChild(btn);
+  });
+  block.appendChild(opts);
+  quizWrap.appendChild(block);
+});
+
+function updateQuizScore() {
+  quizScore.classList.add('show');
+  if (quizAnswered < quizData.length) {
+    quizScore.innerHTML = '<span class="big">' + quizScoreVal + ' / ' + quizAnswered + '</span><span class="verdict">Правильных из ' + quizAnswered + ' отвеченных</span>';
+    return;
+  }
+  if (quizScoreVal >= 8) {
+    quizScore.innerHTML = '<span class="big">' + quizScoreVal + ' / ' + quizData.length + '</span><span class="verdict">🎓 Отлично! Ты можешь получить сертификат.</span>' +
+      '<div class="cert-btn-wrap"><button class="btn btn-primary" onclick="showCertificate()">🎓 Получить сертификат</button></div>';
+  } else {
+    quizScore.innerHTML = '<span class="big">' + quizScoreVal + ' / ' + quizData.length + '</span><span class="verdict">📖 Нужно 8+ правильных для сертификата. Перечитай разделы «Теория» и «Анализ».</span>';
+  }
+}
+
+/* ============ Модалка имени ============ */
+var nameModal = document.getElementById('nameModal');
+var nameInput = document.getElementById('nameInput');
+var pendingCert = null;
+
+function openNameModal() {
+  nameModal.classList.add('open');
+  nameInput.value = userName || 'Богданова Елизавета';
+  nameInput.focus();
+}
+function closeNameModal(confirmed) {
+  if (confirmed) {
+    userName = nameInput.value.trim() || 'Гость';
+    localStorage.setItem('certName', userName);
+    if (typeof pendingCert === 'function') { pendingCert(); pendingCert = null; }
+  }
+  nameModal.classList.remove('open');
+}
+nameInput.addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') closeNameModal(true);
+});
+
+/* ============ Сертификат ============ */
+function showCertificate() {
+  if (!userName) {
+    pendingCert = drawCertificate;
+    openNameModal();
+    return;
+  }
+  drawCertificate();
+}
+
+function drawCertificate() {
+  var date = new Date().toLocaleDateString('ru-RU');
+  var canvas = document.createElement('canvas');
+  canvas.width = 1400; canvas.height = 990;
+  var x = canvas.getContext('2d');
+
+  x.fillStyle = '#ffffff'; x.fillRect(0, 0, 1400, 990);
+
+  var grad = x.createLinearGradient(0, 0, 1400, 990);
+  grad.addColorStop(0, '#8b5cf6');
+  grad.addColorStop(0.5, '#c084fc');
+  grad.addColorStop(1, '#f0abfc');
+  x.strokeStyle = grad; x.lineWidth = 18;
+  x.strokeRect(40, 40, 1320, 910);
+
+  x.strokeStyle = '#e9d5ff'; x.lineWidth = 2;
+  x.strokeRect(70, 70, 1260, 850);
+
+  x.textAlign = 'center';
+  x.font = '90px sans-serif';
+  x.fillText('🐧', 700, 200);
+
+  x.fillStyle = '#4c1d95';
+  x.font = 'bold 72px sans-serif';
+  x.fillText('СЕРТИФИКАТ', 700, 310);
+
+  x.fillStyle = '#6b6280';
+  x.font = '26px sans-serif';
+  x.fillText('подтверждает прохождение теста по теме', 700, 375);
+
+  x.fillStyle = '#2e1065';
+  x.font = 'bold 28px sans-serif';
+  x.fillText('«Анализ современных технологий адаптации персонала»', 700, 425);
+
+  x.fillStyle = '#6d28d9';
+  x.font = 'bold 58px sans-serif';
+  x.fillText(userName, 700, 560);
+
+  x.strokeStyle = '#c4b5fd'; x.lineWidth = 3;
+  x.beginPath(); x.moveTo(400, 590); x.lineTo(1000, 590); x.stroke();
+
+  x.fillStyle = '#2e1065';
+  x.font = 'bold 34px sans-serif';
+  x.fillText('Результат: ' + quizScoreVal + ' из ' + quizData.length + ' (' + Math.round(quizScoreVal / quizData.length * 100) + '%)', 700, 680);
+
+  x.fillStyle = '#6b6280';
+  x.font = '22px sans-serif';
+  x.fillText('Дата: ' + date, 700, 790);
+  x.fillText('Дисциплина «Управление персоналом» · Направление «Менеджмент»', 700, 830);
+
+  x.fillStyle = '#4c1d95';
+  x.font = 'bold 20px sans-serif';
+  x.fillText('НИУ МИЭТ · 2026', 700, 880);
+
+  var area = document.getElementById('certificate-area');
+  var wrap = document.getElementById('cert-canvas-wrap');
+  wrap.innerHTML = '';
+  wrap.appendChild(canvas);
+  var btns = document.createElement('div');
+  btns.className = 'cert-btn-wrap';
+  btns.innerHTML = '<button class="btn btn-primary" onclick="downloadCertPNG()">⬇️ Скачать PNG</button>' +
+                   '<button class="btn btn-ghost" onclick="downloadCertPDF()">🖨️ Скачать PDF</button>';
+  wrap.appendChild(btns);
+  area.style.display = 'block';
+  area.scrollIntoView({ behavior: 'smooth' });
+}
+
+function downloadCertPNG() {
+  var canvas = document.querySelector('#cert-canvas-wrap canvas');
+  if (!canvas) return;
+  var a = document.createElement('a');
+  a.download = 'certificate_adaptation.png';
+  a.href = canvas.toDataURL('image/png');
+  a.click();
+}
+
+function downloadCertPDF() {
+  var canvas = document.querySelector('#cert-canvas-wrap canvas');
+  if (!canvas) return;
+  var imgData = canvas.toDataURL('image/png');
+  var win = window.open('', '_blank');
+  win.document.write('<html><head><title>Сертификат</title><style>body{margin:0;padding:20px;text-align:center;background:#faf7ff;}img{max-width:100%;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.1);}@media print{body{padding:0;}img{max-width:100%;}}</style></head><body><img src="' + imgData + '" onload="setTimeout(function(){window.print()},300)"/></body></html>');
+  win.document.close();
+}
+
+/* ============ Пингвин ============ */
+var penguinText = document.getElementById('penguinText');
+var penguinBubble = document.getElementById('penguinBubble');
+var penguinClose = document.getElementById('penguinClose');
+var penguinAvatar = document.getElementById('penguinAvatar');
+var penguinFaq = document.getElementById('penguinFaq');
+var faqClose = document.getElementById('faqClose');
+var faqOptions = document.getElementById('faqOptions');
+var faqAnswer = document.getElementById('faqAnswer');
+
+var sectionTips = {
+  'top': 'Привет! Я Онбо 🐧 Гид по ЭОР. Листай вниз — я буду комментировать разделы и подсказывать главное.',
+  'theory': 'Раздел «Теория» — база: 7 подразделов и 3 интерактива. Советую пройти их по порядку.',
+  'tech': '9 технологий в 3 категориях. Кликай на карточки, а если непонятно — внизу кнопка с полными описаниями.',
+  'analysis': 'Раздел «Анализ»: матрица сравнения + 4 проверенных кейса + плюсы и минусы.',
+  'conclusions': 'Выводы — тезисы, цели и задачи, которые решались в работе.',
+  'quiz': 'Тест на 10 вопросов. За 8+ правильных — сертификат 🎓',
+  'sources': '9 проверенных источников, по каждому — рабочая ссылка.'
+};
+
+var sectionEls = [
+  { id: 'top', el: document.getElementById('top') },
+  { id: 'theory', el: document.getElementById('theory') },
+  { id: 'tech', el: document.getElementById('tech') },
+  { id: 'analysis', el: document.getElementById('analysis') },
+  { id: 'conclusions', el: document.getElementById('conclusions') },
+  { id: 'quiz', el: document.getElementById('quiz') },
+  { id: 'sources', el: document.getElementById('sources') }
+].filter(function(x) { return x.el; });
+
+var bubbleHiddenByUser = false;
+var currentSection = 'top';
+
+var sectionObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) {
+      var found = sectionEls.find(function(s) { return s.el === e.target; });
+      if (found && found.id !== currentSection) {
+        currentSection = found.id;
+        if (!bubbleHiddenByUser && !penguinFaq.classList.contains('open')) {
+          penguinText.textContent = sectionTips[found.id] || sectionTips['top'];
+          penguinBubble.classList.remove('hidden');
+        }
+      }
+    }
+  });
+}, { threshold: 0.35, rootMargin: '-100px 0px -40% 0px' });
+sectionEls.forEach(function(s) { sectionObserver.observe(s.el); });
+
+penguinClose.addEventListener('click', function(e) {
+  e.stopPropagation();
+  penguinBubble.classList.add('hidden');
+  bubbleHiddenByUser = true;
+});
+
+penguinAvatar.addEventListener('click', function() {
+  if (penguinFaq.classList.contains('open')) penguinFaq.classList.remove('open');
+  else { penguinFaq.classList.add('open'); faqAnswer.classList.remove('show'); }
+});
+
+faqClose.addEventListener('click', function() { penguinFaq.classList.remove('open'); });
+
+var faq = [
+  { q: 'Что такое онбординг?', a: 'Онбординг (адаптация) — процесс вхождения нового сотрудника в компанию. Длится 3–6 месяцев и включает 4 этапа: preboarding, ориентация, погружение, интеграция.' },
+  { q: 'Что такое eNPS?', a: 'Индекс лояльности сотрудников: % промоутеров (9–10) минус % критиков (0–6). Используется как метрика удовлетворённости онбордингом.' },
+  { q: 'Что такое time-to-productivity?', a: 'Время, за которое новый сотрудник выходит на плановую продуктивность. Ключевая метрика эффективности онбординга.' },
+  { q: 'Какая технология самая важная?', a: 'Универсального ответа нет. Бадди-система и микрообучение нужны почти всегда. VR оправдан на производстве, но избыточен в офисе. Платформа нужна при потоке 100+ новичков в год.' },
+  { q: 'Что такое бадди-система?', a: 'Закрепление за новичком опытного коллеги-бадди, который помогает с бытовыми и рабочими вопросами. В Яндексе в 2025 году было 10 338 сотрудников-бадди.' },
+  { q: 'Какие компании ты упоминаешь?', a: 'Только проверенные кейсы: МТС (98% удовлетворённости, 2025), Яндекс (10 338 бадди, 2025), «Золотое Яблоко» (VR, продажи +25%), «Абсолют Банк» (текучесть −5%, обращения к HR −90%).' },
+  { q: 'Как получить сертификат?', a: 'Пройти тест на 10 вопросов и ответить правильно на 8+. После этого появится кнопка «Получить сертификат» — введи имя и скачай PNG или PDF.' }
+];
+
+faq.forEach(function(item) {
+  var btn = document.createElement('button');
+  btn.className = 'faq-opt';
+  btn.textContent = item.q;
+  btn.addEventListener('click', function() {
+    faqAnswer.textContent = item.a;
+    faqAnswer.classList.add('show');
+  });
+  faqOptions.appendChild(btn);
+});
+</script>
+</body>
+</html>
